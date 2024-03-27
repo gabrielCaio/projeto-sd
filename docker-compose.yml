@@ -1,0 +1,74 @@
+version: '3'
+
+name: "projeto-sd"
+
+services:
+
+  # Rabbit
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"  # Porta de comunicação
+      - "15672:15672"  # Painel de controle
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq  # Volume para persistir os dados
+    healthcheck:
+      # Testa se o rabbitmq está rodando
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  # Database (Mongo DB)
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=guest
+      - MONGO_INITDB_ROOT_PASSWORD=guest
+      - MONGO_INITDB_DATABASE=sd
+    # healthcheck:
+    #   test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+    #   interval: 1s
+    #   timeout: 3s
+    #   retries: 10
+
+  # App 1
+  app-1:
+    build: ./app-1
+    volumes:
+      - ./app-1:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      rabbitmq:
+       condition: service_healthy
+    environment:
+      - RABBITMQ_HOST=rabbitmq # Host do rabbitmq
+      - RABBITMQ_PORT=5672 # Porta do rabbitmq
+
+  # App 2
+  app-2:
+    build: ./app-2
+    volumes:
+      - ./app-2:/app
+    ports:
+      - "3001:3001"
+    depends_on:
+      rabbitmq:
+       condition: service_healthy
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+
+
+# Declaração dos volumes
+volumes:
+  rabbitmq_data:
+  mongodb_data:
