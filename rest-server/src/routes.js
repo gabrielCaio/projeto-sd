@@ -8,7 +8,7 @@ const sendMessage = require('./services/rabbitmq')
 const userController = require('./controllers/userController')
 
 // JWT middleware authentication
-const auth = require('./middlewares/jwt_auth')
+const auth = require('./middlewares/jwtAuth')
 
 // Test server
 router.get('/test', (req, res) => res.send('Server Working!!!'))
