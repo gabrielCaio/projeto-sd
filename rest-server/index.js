@@ -10,7 +10,7 @@ const app = express()
 
 app.use(express.json())
 app.use(morgan('dev'))
-// app.use("/", router)
+app.use("/", router)
 
 app.listen(port, () => {
   console.log(`${app_name} listening on port ${port}...`)
