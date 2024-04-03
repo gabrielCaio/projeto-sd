@@ -1,11 +1,16 @@
 require('dotenv').config()
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs')
+
+const { rabbitManager, sendMessage, publishMessageWithResponse } = require('../services/rabbitmq')
+const debug  = require('../services/debug')
 
 function generateToken(props = {}) {
     return jwt.sign(props, process.env.SECRET_KEY, {
       expiresIn: 84600,
-    });
-  }
+    })
+}
+
+const queue_name = 'user_data'
 
 module.exports = {
 
@@ -20,13 +25,13 @@ module.exports = {
             let newUser = { cpf, email, hash, name }
 
             // TODO: send to web-server and save to database
+            const resMsg = await publishMessageWithResponse('A', newUser, 'res_user_data')
     
-            return res.send(newUser)
+            return res.send(resMsg)
 
         } catch (e) {
-
+            debug(e)
             return res.status(500).send({ error: e })
-
         }
     },
 
@@ -41,7 +46,7 @@ module.exports = {
             return res.send({ message: "login"})
 
         } catch (e) {
-            return res.status(500).send({ error: e });
+            return res.status(500).send({ error: e })
         }
     },
 
@@ -55,7 +60,7 @@ module.exports = {
             return res.send(users)
 
         } catch (e) {
-            return res.status(500).send({ error: e });
+            return res.status(500).send({ error: e })
         }
     },
 
@@ -68,7 +73,7 @@ module.exports = {
             return res.send({ message: "user deleted" })
 
         } catch (e) {
-            return res.status(500).send({ error: e });
+            return res.status(500).send({ error: e })
         }
     }
 
