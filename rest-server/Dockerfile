@@ -1,6 +1,8 @@
 FROM node:21-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
+
+COPY package*.json ./
 
 COPY . .
 
@@ -8,4 +10,4 @@ RUN yarn install
 
 EXPOSE 3000
 
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
