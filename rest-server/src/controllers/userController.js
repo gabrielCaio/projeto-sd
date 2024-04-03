@@ -1,6 +1,11 @@
 require('dotenv').config()
 const bcrypt = require('bcryptjs');
 
+function generateToken(props = {}) {
+    return jwt.sign(props, process.env.SECRET_KEY, {
+      expiresIn: 84600,
+    });
+  }
 
 module.exports = {
 
