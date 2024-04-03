@@ -2,7 +2,7 @@ const express = require('express')
 
 const router = require('./src/routes')
 
-const app_name = "APP-1"
+const app_name = "rest-server"
 const port = 3000
 
 const app = express()

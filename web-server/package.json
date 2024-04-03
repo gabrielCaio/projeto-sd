@@ -1,5 +1,5 @@
 {
-  "name": "app-1",
+  "name": "web-server",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "amqplib": "^0.10.3",
-    "express": "^4.19.2"
+    "mongoose": "^8.2.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

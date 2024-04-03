@@ -39,11 +39,11 @@ services:
     #   timeout: 3s
     #   retries: 10
 
-  # App 1
-  app-1:
-    build: ./app-1
+  # Rest Server
+  rest-server:
+    build: ./rest-server
     volumes:
-      - ./app-1:/app
+      - ./rest-server:/app
     ports:
       - "3000:3000"
     depends_on:
@@ -53,11 +53,11 @@ services:
       - RABBITMQ_HOST=rabbitmq # Host do rabbitmq
       - RABBITMQ_PORT=5672 # Porta do rabbitmq
 
-  # App 2
-  app-2:
-    build: ./app-2
+  # Web Server
+  web-server:
+    build: ./web-server
     volumes:
-      - ./app-2:/app
+      - ./web-server:/app
     ports:
       - "3001:3001"
     depends_on:
