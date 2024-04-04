@@ -1,7 +1,7 @@
 import React from "react";
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, TextField } from "@mui/material";
 
 import PixData from "../../services/Pix.json"
 
@@ -13,6 +13,15 @@ const Item = styled(Paper)(() => ({
   "&:hover": {
     marginTop: '10px',
   },
+}));
+
+const Description = styled(Grid)(() => ({
+  marginTop: '10px',
+}));
+
+const Field = styled(Grid)(() => ({
+  paddingTop: '10px',
+  marginLeft: '40px',
 }));
 
 export default function Pix() {
@@ -44,11 +53,24 @@ export default function Pix() {
 
         <Grid item xs={4}>
           <Item>
-            <h3 className="Title">Fazer Pagamento</h3>
+            <h3 className="Title">Fazer transferência</h3>
+            <Description>
+              Informe o valor e a chave Pix para qual você deseja fazer a transferência
+            </Description>
+
+            <p className="Subtitle">Valor:</p>
+            <Field>
+              <TextField id="outlined-basic" label="R$" variant="outlined" type="number" />
+            </Field>
+
+            <p className="Subtitle">Chave pix:</p>
+            <Field>
+              <TextField id="outlined-basic" label="Chave" variant="outlined" />
+            </Field>
 
             <p className="BottomCard">
               <Button>
-                Nova transação
+                Realizar pix
               </Button>
             </p>
           </Item>
