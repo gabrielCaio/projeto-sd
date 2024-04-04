@@ -38,3 +38,15 @@ Para entrar no mongodb express utilize:
     username: admin,
     password: pass
 ```
+
+# Frontend
+
+Para rodar a versão WEB da aplicação é necessário:
+
+* Fazer checkout para branch "Fintech-frontend";
+* Com o ambiente devidamente configurado (ReactJS e Yarn) rodar o comando
+  
+```bash
+    yarn start
+```
+  
