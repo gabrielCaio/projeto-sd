@@ -29,7 +29,7 @@ module.exports = {
       user.password = undefined
       user.operationalPassword = undefined
 
-      return res.send(user)
+      return res.send({ user, token: generateToken({ id: user.userId }) })
 
     } catch (e) {
       debug(e)
@@ -53,20 +53,69 @@ module.exports = {
     }
   },
 
+  async login(req, res) {
+
+    try {
+
+      const { email, password } = req.body
+
+      const user = await User.findOne({ where: { email: email }})
+
+      if (!user) return res.status(400).send({ error: "User not found"})
+
+      if (!(await bcrypt.compare(password, user.password))) return res.status(400).send({ error: "Password Invalid" })
+
+      user.password = undefined
+      user.operationalPassword = undefined
+
+      const token = generateToken({id: user.id})
+
+      return res.send({ user, token })
+
+    } catch (e) {
+      debug(e)
+      return res.status(500).send({ error: e })
+    }
+
+  },
+
+  async authenticate(req, res) {
+
+    try {
+
+      const id = req.userId
+
+      const user = await User.findByPk(id)
+
+      if (!user) return res.status(404).send({ error: "User not found" })
+
+      user.password = undefined
+      user.operationalPassword = undefined
+
+      return res.send({ user, token: generateToken({ id }) })
+
+    } catch (e) {
+      debug(e)
+      return res.status(500).send({ error: e })
+    }
+
+  },
+
   async addBalance(req, res) {
-    // TODO: Make this asyncronous
     try {
 
       const { userId, value } = req.body
 
       const user = await User.findByPk(userId)
 
+      // TODO: Make this asyncronous (ProccessPayments)
+
       if (user) {
         user.balance = value
         await user.save()
       }
 
-      return res.send({ message: "Money added!" })
+      return res.send({ message: "Pagamento está sendo processado" })
 
     } catch (e) {
       debug(e)
@@ -75,14 +124,15 @@ module.exports = {
   },
 
   async addCardLimit(req, res) {
-    // TODO: Make this asyncronous
     try {
-
+      
       const id = req.userId
-
+      
       const user = await User.findByPk(id)
-
+      
       if (!user) return res.status(400).send({ error: "User not found"})
+
+      // TODO: Make this asyncronous (ProccessPayments)
 
       return res.send({ message: "Your request was accepted succesifully" })
 
@@ -91,27 +141,5 @@ module.exports = {
       return res.status(500).send({ error: e })
     }
   },
-
-  async createPixKey(req, res) {
-    // TODO: Make this asyncronous
-    try {
-
-      const id = req.userId
-
-      const user = await User.findByPk(id)
-
-      if (!user) return res.status(400).send({ error: "User not found"})
-
-      return res.send({ message: "Your request was accepted succesifully" })
-
-    } catch (e) {
-      debug(e)
-      return res.status(500).send({ error: e })
-    }
-  },
-
-  async updatePixKey(req, res) {},
-
-  async deletePixKey(req, res) {},
 
 }

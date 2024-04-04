@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize")
 const sequelize = require("../services/database")
+const User = require('../models/user')
 
 const Invoice = sequelize.define("Invoice", {
     invoiceId: {
@@ -19,18 +20,8 @@ const Invoice = sequelize.define("Invoice", {
         type: DataTypes.DATE,
         required: true
     },
-    creationDate: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: new Date()
-    },
-    modificationDate: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: new Date()
-    },
 })
-  
-// const Invoice = mongoose.model("Invoice", InvoiceSchema)
+
+Invoice.belongsTo(User, { foreignKey: 'userId' })
 
 module.exports = Invoice

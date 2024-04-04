@@ -2,18 +2,18 @@ version: '3'
 
 services:
 
-  # client1:
-  #   container_name: "client1"
-  #   restart: on-failure:3
-  #   build:
-  #     context: ./react-client
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "${REACT_FINTECH1_PORT}:${REACT_FINTECH1_PORT}"
-  #   environment:
-  #     - PORT=${REACT_FINTECH1_PORT}
-  #   depends_on:
-  #     - server1
+  client1:
+    container_name: "client1"
+    restart: on-failure:3
+    build:
+      context: ./react-client
+      dockerfile: Dockerfile
+    ports:
+      - "${REACT_FINTECH1_PORT}:${REACT_FINTECH1_PORT}"
+    environment:
+      - PORT=${REACT_FINTECH1_PORT}
+    depends_on:
+      - server1
 
   server1:
     networks:
@@ -57,6 +57,64 @@ services:
       test: [ "CMD-SHELL", "pg_isready -d postgres" ]
       interval: 10s
       retries: 5
+
+  microservice_proccess-payments:
+    networks:
+      - fintech
+    container_name: "proccess-payments"
+    restart: on-failure:3
+    build: ./proccess-payments
+    # Live reload
+    volumes:
+      - ./proccess-payments:/app
+    ports:
+      - "${SERVICE_BOLETO_PORT}:${SERVICE_BOLETO_PORT}"
+    environment:
+     - PORT=${SERVICE_BOLETO_PORT}
+     - NODE_ENV=${NODE_ENV}
+     - POSTGRES_SECRET=${POSTGRES_SECRET}
+     - RABBITMQ_URI=${RABBITMQ_URL}
+     - APP_NAME=${SERVICE_BOLETO_NAME}
+
+  microservice_notify:
+    networks:
+      - fintech
+    container_name: "notify"
+    restart: on-failure:3
+    build: ./proccess-payments
+    # Live reload
+    volumes:
+      - ./notify:/app
+    ports:
+      - "${SERVICE_BOLETO_PORT}:${SERVICE_BOLETO_PORT}"
+    environment:
+     - PORT=${SERVICE_BOLETO_PORT}
+     - NODE_ENV=${NODE_ENV}
+     - POSTGRES_SECRET=${POSTGRES_SECRET}
+     - RABBITMQ_URI=${RABBITMQ_URL}
+     - APP_NAME=${SERVICE_BOLETO_NAME}
+
+  # Rabbit
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: "${RABBITMQ_NAME}"
+    restart: on-failure:3
+    networks:
+      - fintech
+    ports:
+      - "${RABBITMQ_PORT}:${RABBITMQ_PORT}"  # Porta de comunicação
+      - "${RABBITMQ_MANAGMENT_PORT}:${RABBITMQ_MANAGMENT_PORT}"  # Painel de controle
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_PASSWORD}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    volumes:
+      - central_rabbitmq_data:/var/lib/rabbitmq  # Volume para persistir os dados
+    healthcheck:
+      # Testa se o rabbitmq está rodando
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 1s
+      timeout: 3s
+      retries: 30
 
 volumes:
   fintech_data:

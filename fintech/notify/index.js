@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const { consumeMessages } = require('./src/services/rabbitmq')
+const { consumeMessages } = require('./src/rabbit')
 
 const { APP_NAME } = process.env
 

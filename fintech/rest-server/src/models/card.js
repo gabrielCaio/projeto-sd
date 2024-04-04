@@ -1,10 +1,16 @@
 const { DataTypes } = require("sequelize")
 const sequelize = require("../services/database")
+const User = require('../models/user')
 
 const Card = sequelize.define("Card", {
+    cardId: {
+        type: DataTypes.BIGINT,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true
+    },
     number: {
         type: DataTypes.STRING,
-        primaryKey: true,
         allowNull: false,
         unique: true,
         validate: {
@@ -34,18 +40,8 @@ const Card = sequelize.define("Card", {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    creationDate: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: new Date()
-    },
-    modificationDate: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: new Date()
-    },
 })
 
-Card.hasOne(User, { foreignKey: 'cpf' })
+Card.belongsTo(User, { foreignKey: 'userId' })
 
 module.exports = Card

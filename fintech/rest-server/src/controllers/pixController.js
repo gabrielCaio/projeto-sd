@@ -1,17 +1,17 @@
 require("dotenv").config()
 
-const Invoice = require("../models/invoice")
+const Pix = require("../models/pix")
 const debug = require("../services/debug")
 
 module.exports = {
 
-    async create(req, res) {
+    async createKey(req, res) {
 
         try {
 
-            console.log("Cria Fatura")
+            console.log("Cria Chave Pix")
 
-            return res.send({ message: "Cria Fatura" })
+            return res.send({ message: "Cria Chave Pix" })
 
         } catch (e) {
             debug(e)
@@ -20,13 +20,13 @@ module.exports = {
 
     },
 
-    async get(req, res) {
+    async getKeys(req, res) {
 
         try {
 
-            console.log("Get Fatura Mais Recente")
+            console.log("Get Chave Pix do usuário")
 
-            return res.send({ message: "Get Fatura Mais Recente" })
+            return res.send({ message: "Get Chave Pix do usuário" })
 
         } catch (e) {
             debug(e)
@@ -35,13 +35,13 @@ module.exports = {
 
     },
 
-    async update(req, res) {
+    async updateKey(req, res) {
 
         try {
 
-            console.log("Atualiza Fatura")
+            console.log("Atualiza Chave Pix")
 
-            return res.send({ message: "Atualiza Fatura" })
+            return res.send({ message: "Atualiza Chave Pix" })
 
         } catch (e) {
             debug(e)
@@ -50,13 +50,13 @@ module.exports = {
 
     },
 
-    async getAllInvoices(req, res) {
+    async deleteKey(req, res) {
 
         try {
 
-            console.log("Get All Invoices do usuário")
+            console.log("Deleta Chave Pix")
 
-            return res.send({ message: "Get All Invoices do usuário" })
+            return res.send({ message: "Deleta Chave Pix" })
 
         } catch (e) {
             debug(e)
@@ -65,13 +65,13 @@ module.exports = {
 
     },
 
-    async payInvoice(req, res) {
+    async transfer(req, res) {
 
         try {
 
-            console.log("Paga Invoice")
+            console.log("Transferencia Pix")
 
-            return res.send({ message: "Paga Invoice" })
+            return res.send({ message: "Transferencia Pix" })
 
         } catch (e) {
             debug(e)

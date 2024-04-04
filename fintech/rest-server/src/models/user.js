@@ -48,14 +48,6 @@ const User = sequelize.define("User", {
         type: DataTypes.INTEGER,
         defaultValue: 0,
     },
-    creationDate: {
-        type: DataTypes.DATE,
-        defaultValue: new Date()
-    },
-    modificationDate: {
-        type: DataTypes.DATE,
-        defaultValue: new Date()
-    },
 })
 
 module.exports = User
