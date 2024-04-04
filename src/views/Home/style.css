@@ -4,3 +4,23 @@
   color: white;
   margin-top: 0;
 }
+
+.Title {
+  font-weight: 800;
+}
+
+.Subtitle {
+  margin-top: 15px;
+  margin-left: 12px;
+  font-weight: bold;
+}
+
+.Value {
+  margin-left: 22px;
+}
+
+.BottomCard {
+  text-align: center;
+  margin-top: 40px;
+  font-weight: bold;
+}

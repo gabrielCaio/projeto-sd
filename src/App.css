@@ -1,4 +1,9 @@
 * {
   margin: 0;
-  padding: 0;
+}
+
+.PageContent {
+  display: flex;
+  height: max-content;
+  padding: 50px;
 }

@@ -5,6 +5,11 @@ import Header from "../../components/Header";
 import User from "../../services/User.json"
 import NavBar from "../../components/NavBar";
 
+import Saldo from "../Saldo";
+import Cartoes from "../Cartoes";
+import Boletos from "../Boletos";
+import Pix from "../Pix";
+
 export default function HomePage() {
   const FintechName = "Nubank";
   const UserData = User;
@@ -14,25 +19,25 @@ export default function HomePage() {
     switch (selectedTab) {
       case 1:
         return (
-          <p>Tela dos meus cartoes</p>
+          <Cartoes />
         );
       case 2:
         return (
-          <p>Tela de boletos</p>
+          <Boletos />
         );
       case 3:
         return (
-          <p>Tela da area pix</p>
+          <Pix />
         );
       default:
         return (
-          <p>Tela principal</p>
+          <Saldo UserSaldo={User.Saldo} UserLimiteCartao={User.LimiteCartao} />
         );
     }
   }
 
   return (
-    <div className="Container">
+    <div>
       <Header 
         FintechName={FintechName} 
         UserName={UserData.Name}

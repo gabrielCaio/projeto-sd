@@ -18,6 +18,7 @@ export default function NavBar({selectedTab, setSelectedTab}) {
         </div>
       </Button>
       <spam className="Divider" />
+
       <Button onClick={() => {setSelectedTab(1)}}>
         <div className={selectedTab === 1 ? "NavBarSelectedIcon" : "NavBarItem"}>
           <CreditCardIcon fontSize="large"  />
@@ -25,6 +26,7 @@ export default function NavBar({selectedTab, setSelectedTab}) {
         </div>
       </Button>
       <spam className="Divider" />
+
       <Button onClick={() => {setSelectedTab(2)}}>
         <div className={selectedTab === 2 ? "NavBarSelectedIcon" : "NavBarItem"}>
           <RequestQuoteIcon fontSize="large"  />
@@ -32,6 +34,7 @@ export default function NavBar({selectedTab, setSelectedTab}) {
         </div>
       </Button>
       <spam className="Divider" />
+      
       <Button onClick={() => {setSelectedTab(3)}}>
         <div className={selectedTab === 3 ? "NavBarSelectedIcon" : "NavBarItem"}>
           <PixIcon fontSize="large" />
