@@ -1,0 +1,10 @@
+[
+  {
+    "type": "email",
+    "chave": "joazinho@teste.com"
+  },
+  {
+    "type": "cpf",
+    "chave": "000.111.222-33"
+  }
+]
