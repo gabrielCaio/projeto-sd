@@ -1,3 +1,5 @@
+/*
+
 const amqp = require('amqplib')
 
 const rabbit_url = 'amqp://rabbitmq'
@@ -104,3 +106,9 @@ async function consumeMessages() {
 // }
 
 module.exports = consumeMessages
+
+===============================================================================================
+
+
+
+*/

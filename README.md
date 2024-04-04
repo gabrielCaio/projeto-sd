@@ -13,7 +13,7 @@ Usuário e senha para os serviços como RabbitMQ e MongoDB devem ser mantidos co
 
 # Ports
 
-```
+```bash
     {
         # == Services ==
 
@@ -26,4 +26,15 @@ Usuário e senha para os serviços como RabbitMQ e MongoDB devem ser mantidos co
         3000: App 1,
         3001: App 2
     }
+```
+
+# Central
+
+## MongoDB Express
+
+Para entrar no mongodb express utilize:
+
+```bash
+    username: admin,
+    password: pass
 ```

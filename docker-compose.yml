@@ -6,6 +6,8 @@ services:
 
   # Rabbit
   rabbitmq:
+    container_name: "rabbitmq"
+    restart: on-failure:3
     image: rabbitmq:3-management
     ports:
       - "5672:5672"  # Porta de comunicação
@@ -22,17 +24,21 @@ services:
       timeout: 3s
       retries: 30
 
-  # Database (Mongo DB)
-  mongodb:
+  # == Central ==
+
+  # Central Database (Mongo DB)
+  central-mongodb:
+    container_name: "central-mongodb"
+    restart: on-failure:3
     image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
-      - mongodb_data:/data/db
+      - central_mongodb_data:/data/db
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=guest
-      - MONGO_INITDB_ROOT_PASSWORD=guest
-      - MONGO_INITDB_DATABASE=sd
+      - MONGO_INITDB_ROOT_USERNAME=central
+      - MONGO_INITDB_ROOT_PASSWORD=central
+      - MONGO_INITDB_DATABASE=central
     # healthcheck:
     #   test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
     #   interval: 1s
@@ -71,4 +77,4 @@ services:
 # Declaração dos volumes
 volumes:
   rabbitmq_data:
-  mongodb_data:
+  central_mongodb_data:

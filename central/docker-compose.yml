@@ -1,0 +1,138 @@
+version: '3'
+
+name: "central"
+
+services:
+  
+  # -- Services --
+
+  # Rabbit
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: "rabbitmq"
+    restart: on-failure:3
+    ports:
+      - "${RABBITMQ_PORT}:${RABBITMQ_PORT}"  # Porta de comunicação
+      - "${RABBITMQ_MANAGMENT_PORT}:${RABBITMQ_MANAGMENT_PORT}"  # Painel de controle
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_PASSWORD}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq  # Volume para persistir os dados
+    healthcheck:
+      # Testa se o rabbitmq está rodando
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  # Central Database (Mongo DB)
+  central_mongodb:
+    container_name: "central_mongodb"
+    restart: on-failure:3
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - central_mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_PASSWORD}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGODB_PASSWORD}
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 2s
+      timeout: 3s
+      retries: 10
+
+  # Mongo Database Manager
+  mongo_express:
+    image: mongo-express
+    restart: on-failure:3
+    ports:
+      - "${MONGO_EXPRESS_PORT}:${MONGO_EXPRESS_PORT}"
+    environment:
+      # ME_CONFIG_MONGODB_SERVER: ${MONGODB_PASSWORD}
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGODB_PASSWORD}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_PASSWORD}
+      ME_CONFIG_MONGODB_URL: ${MONGODB_URL}
+
+  # Server Central
+  server_central:
+   container_name: "${SERVER_CENTRAL_NAME}"
+   restart: on-failure:3
+   build: ./server
+   # Live reload
+   volumes:
+      - ./server:/app
+   ports:
+     - "${SERVER_CENTRAL_PORT}:${SERVER_CENTRAL_PORT}"
+   environment:
+     - PORT=${SERVER_CENTRAL_PORT}
+     - NODE_ENV=${NODE_ENV}
+     - MONGODB_URI=${MONGODB_URL}
+     - RABBITMQ_URI=${RABBITMQ_URL}
+     - APP_NAME=${SERVER_CENTRAL_NAME}
+   depends_on:
+      rabbitmq:
+        condition: service_healthy
+      central_mongodb:
+        condition: service_healthy
+
+  # -- Microservices --
+
+  # Service Boleto
+  microservice_boleto:
+    container_name: "${SERVICE_BOLETO_NAME}"
+    restart: on-failure:3
+    build: ./service-boleto
+    # Live reload
+    volumes:
+      - ./service-boleto:/app
+    ports:
+      - "${SERVICE_BOLETO_PORT}:${SERVICE_BOLETO_PORT}"
+    environment:
+     - PORT=${SERVICE_BOLETO_PORT}
+     - NODE_ENV=${NODE_ENV}
+     - MONGODB_URI=${MONGODB_URL}
+     - RABBITMQ_URI=${RABBITMQ_URL}
+     - APP_NAME=${SERVICE_BOLETO_NAME}
+
+  # Service Pix
+  microservice_pix:
+    container_name: "${SERVICE_PIX_NAME}"
+    restart: on-failure:3
+    build: ./service-pix
+    # Live reload
+    volumes:
+      - ./service-pix:/app
+    ports:
+      - "${SERVICE_PIX_PORT}:${SERVICE_PIX_PORT}"
+    environment:
+     - PORT=${SERVICE_PIX_PORT}
+     - NODE_ENV=${NODE_ENV}
+     - MONGODB_URI=${MONGODB_URL}
+     - RABBITMQ_URI=${RABBITMQ_URL}
+     - APP_NAME=${SERVICE_PIX_NAME}
+
+  # Service Fintech
+  microservice_fintech:
+    container_name: "${SERVICE_FINTECH_NAME}"
+    restart: on-failure:3
+    build: ./service-pix
+    # Live reload
+    volumes:
+      - ./service-fintech:/app
+    ports:
+      - "${SERVICE_FINTECH_PORT}:${SERVICE_FINTECH_PORT}"
+    environment:
+     - PORT=${SERVICE_FINTECH_PORT}
+     - NODE_ENV=${NODE_ENV}
+     - MONGODB_URI=${MONGODB_URL}
+     - RABBITMQ_URI=${RABBITMQ_URL}
+     - APP_NAME=${SERVICE_FINTECH_NAME}
+
+# Declaração dos volumes
+volumes:
+  rabbitmq_data:
+  central_mongodb_data:
