@@ -1,27 +1,47 @@
 import React from "react";
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { Grid } from "@mui/material";
-
-import "./style.css"
+import { Grid, TextField, Button } from "@mui/material";
 
 const Item = styled(Paper)(() => ({
-  backgroundColor: '#ECE8ED',
-  textAlign: 'center',
-  paddingTop: '50px',
-  paddingBottom: '50px',
+  backgroundColor: 'white',
+  padding: '30px',
+  paddingTop: '30px',
+  paddingBottom: '40px',
+  "&:hover": {
+    marginTop: '10px',
+  },
 }));
 
-export default function Boletos({UserSaldo, UserLimiteCartao}) {
+const Field = styled(Grid)(() => ({
+  paddingTop: '40px',
+}));
+
+export default function Boletos() {
   return (
     <div className="PageContent">
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Item>Item 1</Item>
-        </Grid>
-        
-        <Grid item xs={6}>
-          <Item>Item 2</Item>
+        <Grid item xs={12}>
+          <Item>
+            <h3 className="Title">Pagar boleto</h3>
+
+            <div style={{ marginTop: 15 }}>
+              <p className="Value">
+                Informe o código de barras para buscar o boleto que deseja pagar
+              </p>
+            </div>
+
+            <Field>
+              <TextField id="outlined-basic" label="Código de barras" variant="outlined" fullWidth />
+            </Field>
+
+
+            <p className="BottomCard">
+              <Button>
+                Buscar boleto
+              </Button>
+            </p>
+          </Item>
         </Grid>
       </Grid>
     </div>

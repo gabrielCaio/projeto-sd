@@ -11,7 +11,7 @@ import Boletos from "../Boletos";
 import Pix from "../Pix";
 
 export default function HomePage() {
-  const FintechName = "Nubank";
+  const FintechName = "Fintech";
   const UserData = User;
   const [selectedTab, setSelectedTab] = useState(0);
 

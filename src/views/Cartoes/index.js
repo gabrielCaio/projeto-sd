@@ -3,8 +3,6 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import { Grid } from "@mui/material";
 
-import "./style.css"
-
 const Item = styled(Paper)(() => ({
   backgroundColor: '#ECE8ED',
   textAlign: 'center',

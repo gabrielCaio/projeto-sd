@@ -3,8 +3,6 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import { Button, Grid } from "@mui/material";
 
-import "./style.css"
-
 const Item = styled(Paper)(() => ({
   backgroundColor: 'white',
   padding: '30px',
@@ -45,6 +43,16 @@ export default function Saldo({UserSaldo, UserLimiteCartao}) {
 
             <p className="BottomCard">
               Caso deseje aumentar seu limite, entre em contato com o suporte!
+            </p>
+          </Item>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Item>
+            <h3 className="Title">Extrato</h3>
+
+            <p className="BottomCard">
+              Area em contrução
             </p>
           </Item>
         </Grid>
