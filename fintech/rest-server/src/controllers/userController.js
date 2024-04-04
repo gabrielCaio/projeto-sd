@@ -35,7 +35,6 @@ module.exports = {
       debug(e)
       return res.status(500).send({ error: e })
     }
-
   },
 
   async get(req, res) {
@@ -52,7 +51,6 @@ module.exports = {
       debug(e)
       return res.status(500).send({ error: e })
     }
-
   },
 
   async addBalance(req, res) {
@@ -74,7 +72,46 @@ module.exports = {
       debug(e)
       return res.status(500).send({ error: e })
     }
-
   },
+
+  async addCardLimit(req, res) {
+    // TODO: Make this asyncronous
+    try {
+
+      const id = req.userId
+
+      const user = await User.findByPk(id)
+
+      if (!user) return res.status(400).send({ error: "User not found"})
+
+      return res.send({ message: "Your request was accepted succesifully" })
+
+    } catch (e) {
+      debug(e)
+      return res.status(500).send({ error: e })
+    }
+  },
+
+  async createPixKey(req, res) {
+    // TODO: Make this asyncronous
+    try {
+
+      const id = req.userId
+
+      const user = await User.findByPk(id)
+
+      if (!user) return res.status(400).send({ error: "User not found"})
+
+      return res.send({ message: "Your request was accepted succesifully" })
+
+    } catch (e) {
+      debug(e)
+      return res.status(500).send({ error: e })
+    }
+  },
+
+  async updatePixKey(req, res) {},
+
+  async deletePixKey(req, res) {},
 
 }

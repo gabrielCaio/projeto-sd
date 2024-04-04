@@ -14,6 +14,12 @@ const Card = sequelize.define("Card", {
             }
         }
     },
+    type: {
+        type: DataTypes.ENUM,
+        values: ["CREDIT", "DEBIT"],
+        allowNull: false,
+        defaultValue: "DEBIT"
+    },
     cvv: {
         type: DataTypes.STRING,
         allowNull: false,
