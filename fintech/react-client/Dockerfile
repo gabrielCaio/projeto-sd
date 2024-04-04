@@ -8,6 +8,4 @@ COPY . .
 
 RUN yarn install
 
-EXPOSE 3000
-
 ENTRYPOINT ["/app/entrypoint.sh"]

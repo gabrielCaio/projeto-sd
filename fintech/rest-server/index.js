@@ -1,11 +1,11 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 
 const router = require('./src/routes')
 
-const app_name = "rest-server"
-const port = 3000
+const { APP_NAME, PORT } = process.env
 
 const app = express()
 
@@ -29,6 +29,6 @@ app.use((req, res, next) => {
 app.use("/", router)
 
 // Start server
-app.listen(port, () => {
-  console.log(`${app_name} listening on port ${port}...`)
+app.listen(PORT, () => {
+  console.log(`${APP_NAME} listening on port ${PORT}...`)
 })
