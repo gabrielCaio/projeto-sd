@@ -28,7 +28,19 @@ app.use((req, res, next) => {
 // Initialize routes
 app.use("/", router)
 
+const sequelize = require('./src/services/database')
+
 // Start server
-app.listen(PORT, () => {
-  console.log(`${APP_NAME} listening on port ${PORT}...`)
+app.listen(PORT, async () => {
+  try {
+
+    await sequelize.sync({ force: true })
+    console.log('Database synced!')
+
+    console.log(`${APP_NAME} listening on port ${PORT}...`)
+
+  } catch (e) {
+    console.error(e)
+    // process.exit(1)
+  }
 })
