@@ -3,6 +3,8 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import { Button, Grid } from "@mui/material";
 
+import PixData from "../../services/Pix.json"
+
 const Item = styled(Paper)(() => ({
   backgroundColor: 'white',
   padding: '30px',
@@ -20,9 +22,18 @@ export default function Pix() {
         <Grid item xs={4}>
           <Item>
             <h3 className="Title">Minhas chaves</h3>
+            
+            {PixData.map((item) => {
+              return (
+                <div>
+                  <p className="Subtitle">
+                    Chave {item.type.charAt(0).toUpperCase() + item.type.slice(1)}:
+                  </p>
+                  <p className="Value">{item.chave}</p>
+                </div>
+              );
+            })}
 
-            <p className="Subtitle">Chave:</p>
-            <p className="Value">CHAVE_DO_USER_AQUI</p>
             <p className="BottomCard">
               <Button>
                 Adicionar nova chave
