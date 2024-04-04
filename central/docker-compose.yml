@@ -1,0 +1,142 @@
+version: '3'
+
+name: "central"
+
+services:
+  
+  # -- Services --
+
+  # Rabbit
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: "${RABBITMQ_NAME}"
+    restart: on-failure:3
+    # networks:
+    #   - central
+    ports:
+      - "${RABBITMQ_PORT}:${RABBITMQ_PORT}"  # Porta de comunicação
+      - "${RABBITMQ_MANAGMENT_PORT}:${RABBITMQ_MANAGMENT_PORT}"  # Painel de controle
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_PASSWORD}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    volumes:
+      - central_rabbitmq_data:/var/lib/rabbitmq  # Volume para persistir os dados
+    healthcheck:
+      # Testa se o rabbitmq está rodando
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  # Central Database (Postgres DB)
+  central_db:
+    # networks:
+    #   - central
+    container_name: "${DB_NAME}"
+    image: postgres:alpine
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    environment:
+      PGUSER: ${POSTGRES_SECRET}
+      POSTGRES_USER: ${POSTGRES_SECRET}
+      POSTGRES_PASSWORD: ${POSTGRES_SECRET}
+      POSTGRES_DB: ${POSTGRES_SECRET}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - central_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d postgres" ]
+      interval: 10s
+      retries: 5
+
+  # Server Central
+  server_central:
+    # networks:
+    #   - central
+    container_name: "${SERVER_CENTRAL_NAME}"
+    restart: on-failure:3
+    build: ./server
+    # Live reload
+    volumes:
+      - ./server:/app
+    ports:
+      - "${SERVER_CENTRAL_PORT}:${SERVER_CENTRAL_PORT}"
+    environment:
+      - PORT=${SERVER_CENTRAL_PORT}
+      - NODE_ENV=${NODE_ENV}
+      - POSTGRES_SECRET=${POSTGRES_SECRET}
+      - RABBITMQ_URI=${RABBITMQ_URL}
+      - APP_NAME=${SERVER_CENTRAL_NAME}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      central_db:
+        condition: service_healthy
+
+  # -- Microservices --
+
+  # Service Boleto
+  microservice_boleto:
+    # networks:
+    #   - central
+    container_name: "${SERVICE_BOLETO_NAME}"
+    restart: on-failure:3
+    build: ./service-boleto
+    # Live reload
+    volumes:
+      - ./service-boleto:/app
+    ports:
+      - "${SERVICE_BOLETO_PORT}:${SERVICE_BOLETO_PORT}"
+    environment:
+     - PORT=${SERVICE_BOLETO_PORT}
+     - NODE_ENV=${NODE_ENV}
+     - POSTGRES_SECRET=${POSTGRES_SECRET}
+     - RABBITMQ_URI=${RABBITMQ_URL}
+     - APP_NAME=${SERVICE_BOLETO_NAME}
+
+  # Service Pix
+  microservice_pix:
+    # networks:
+    #   - central
+    container_name: "${SERVICE_PIX_NAME}"
+    restart: on-failure:3
+    build: ./service-pix
+    # Live reload
+    volumes:
+      - ./service-pix:/app
+    ports:
+      - "${SERVICE_PIX_PORT}:${SERVICE_PIX_PORT}"
+    environment:
+     - PORT=${SERVICE_PIX_PORT}
+     - NODE_ENV=${NODE_ENV}
+     - POSTGRES_SECRET=${POSTGRES_SECRET}
+     - RABBITMQ_URI=${RABBITMQ_URL}
+     - APP_NAME=${SERVICE_PIX_NAME}
+
+  # Service Fintech
+  microservice_fintech:
+    # networks:
+    #   - central
+    container_name: "${SERVICE_FINTECH_NAME}"
+    restart: on-failure:3
+    build: ./service-pix
+    # Live reload
+    volumes:
+      - ./service-fintech:/app
+    ports:
+      - "${SERVICE_FINTECH_PORT}:${SERVICE_FINTECH_PORT}"
+    environment:
+     - PORT=${SERVICE_FINTECH_PORT}
+     - NODE_ENV=${NODE_ENV}
+     - POSTGRES_SECRET=${POSTGRES_SECRET}
+     - RABBITMQ_URI=${RABBITMQ_URL}
+     - APP_NAME=${SERVICE_FINTECH_NAME}
+
+# Declaração dos volumes
+volumes:
+  central_rabbitmq_data:
+  central_db_data:
+
+# Networks
+networks:
+  central:
