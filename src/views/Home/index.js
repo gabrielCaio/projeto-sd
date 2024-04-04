@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import './style.css'
 import Header from "../../components/Header";
@@ -8,6 +8,28 @@ import NavBar from "../../components/NavBar";
 export default function HomePage() {
   const FintechName = "Nubank";
   const UserData = User;
+  const [selectedTab, setSelectedTab] = useState(0);
+
+  function getPage() {
+    switch (selectedTab) {
+      case 1:
+        return (
+          <p>Tela dos meus cartoes</p>
+        );
+      case 2:
+        return (
+          <p>Tela de boletos</p>
+        );
+      case 3:
+        return (
+          <p>Tela da area pix</p>
+        );
+      default:
+        return (
+          <p>Tela principal</p>
+        );
+    }
+  }
 
   return (
     <div className="Container">
@@ -17,11 +39,10 @@ export default function HomePage() {
         UserSaldo={UserData.Saldo}
         UserLimiteCartao={UserData.LimiteCartao}
       />
-      <NavBar />
-      <div>
-        <p>Corpo do site</p>
-        <p>Corpo do site</p>
-      </div>
+      <NavBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+      {
+        getPage()
+      }
     </div>
   );
 }
