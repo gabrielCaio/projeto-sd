@@ -1,0 +1,17 @@
+.NavBarContainer {
+  display: flex;
+  background-color: #ECE8ED;
+  justify-content: space-evenly;
+  margin-top: -40px;
+  margin-left: 200px;
+  margin-right: 200px;
+  border-radius: 20px;
+}
+
+.NavBarItem {
+  color: black;
+}
+
+.NavBarSelectedIcon {
+  color: #8500EB;
+}

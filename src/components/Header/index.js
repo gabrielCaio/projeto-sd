@@ -1,7 +1,7 @@
 import React from "react";
 
 import './style.css'
-import { Avatar} from "@mui/material";
+import { Avatar } from "@mui/material";
 
 export default function Header({FintechName, UserName, UserSaldo, UserLimiteCartao}) {
 
