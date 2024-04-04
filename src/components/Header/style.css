@@ -1,0 +1,44 @@
+.Header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 50px;
+  background-color: #8500EB;
+  color: white;
+  margin-top: 0;
+}
+
+.UserInfos {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.Saldo {
+  padding-right: 40px;
+}
+
+.SaldoTitle {
+  font-weight: bold;
+}
+
+.Divider {
+  background-color: white;
+  height: 100px;
+  width: 2px;
+  border-radius: 20px;
+  margin-right: 30px;
+}
+
+.Profile {
+  display: flex;
+  justify-content: row;
+}
+
+.ProfileInfo {
+  margin-left: 12px;
+}
